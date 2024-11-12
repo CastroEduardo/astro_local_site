@@ -1,0 +1,43 @@
+---
+interface Props {
+    name: string;
+    url: string;
+    isBig?: boolean;
+    isId?: boolean;
+}
+const { name, url, isBig = false, isId = false } = Astro.props;
+
+//get IdFrom url
+const id = url.split("/").at(-2);
+const imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+let navigate = `/pokemons/${name}`;
+if (isId) {
+    navigate = `/pokemon/${id}`;
+}
+---
+
+<!-- class={`${!isBig && "border"} rounded flex flex-col justify-center items-center p-2`} -->
+<div
+    class:list={[
+        `${!isBig && "border"} rounded flex flex-col justify-center items-center p-2`,
+        {
+            border: !isBig,
+        },
+    ]}
+>
+    <a href={navigate}>
+        <img
+            transition:name={`${name}-image`}
+            class:list={[
+                {
+                    "w-50 h-50": isBig,
+                    "w-22 h-22": !isBig,
+                },
+            ]}
+            src={imgSrc}
+        />
+    </a>
+    <span class={`${isBig && "text-4xl"} text-red-100 capitalize font-bold`}
+        >#{id} {name}</span
+    >
+</div>

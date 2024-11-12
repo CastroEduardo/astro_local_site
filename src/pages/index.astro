@@ -1,16 +1,29 @@
 ---
+//Codigo server side Only --Momento de construccion BUILD-TIME;
+import MainLayout from "../Layout/MainLayout.astro";
+import PokemonCard from "@/components/pokemons/PokemonCard.astro";
+import type { PokemonListResponse } from "@/interfaces/pokemon-list.ts";
 
+const resp = await fetch(
+    "https://pokeapi.co/api/v2/pokemon?offset=20&limit=80",
+);
+const data = (await resp.json()) as PokemonListResponse;
+// console.log(data);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout
+    title="Pokemons | DETAILS 2"
+    description={`Informacion del pokemon`}
+>
+    <h1 class="text-3xl text-center my-5">Listado de Pokemons</h1>
+    <section
+        aria-label="Listado Pokemons"
+        class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-2 mt-3"
+    >
+        {
+            data.results.map(({ name, url }) => (
+                <PokemonCard name={name} url={url} />
+            ))
+        }
+    </section>
+</MainLayout>

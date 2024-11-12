@@ -1,0 +1,59 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainLayout from "src/Layout/MainLayout.astro";
+import type { PokemonListResponse } from "../../interfaces/pokemon-list";
+
+//Path relativo
+// import PokemonCard from "../../components/pokemons/PokemonCard.astro";
+
+import PokemonCard from "@/components/pokemons/PokemonCard.astro";
+import type { imageConfig } from "astro:assets";
+import Title from "@/components/pokemons/shared/Title.astro";
+export const getStaticPaths = (async () => {
+    const resp = await fetch(
+        "https://pokeapi.co/api/v2/pokemon?offset=20&limit=80",
+    );
+    const { results } = (await resp.json()) as PokemonListResponse;
+
+    return results.map(({ name, url }) => {
+        return {
+            params: { id: url.split("/").at(-2) },
+            props: { name: name, url: url },
+        };
+    });
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { name, url } = Astro.props;
+const imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+const audioSr = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
+---
+
+<MainLayout
+    title={`Pokemons | #${id} ${name}`}
+    description={`Informacion del pokemon`}
+    image={imgSrc}
+>
+    <section class="mt-10 mx-10 flex flex-col justify-center items-center">
+        <div>
+            <!-- <a href="/"> Regresar</a> -->
+            <button onclick="history.back()" class="text-blue-400"
+                >*Regresar</button
+            >
+            <!-- <h1 class="text-3xl capitalize text-center">Nro - {id}</h1> -->
+            <!-- <h1 class="text-3xl capitalize">{name}</h1> -->
+            <Title>{name}</Title>
+        </div>
+        <PokemonCard name={name} url={url} isBig />
+        <audio controls class="mt-5">
+            <source src={audioSr} type="audio/ogg" />
+            Your browser does not suppoer the audio element.
+        </audio>
+    </section>
+</MainLayout>
+
+<style>
+    a {
+        @apply hover:underline text-blue-300;
+    }
+</style>

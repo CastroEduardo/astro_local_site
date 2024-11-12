@@ -1,0 +1,32 @@
+---
+import { Counter } from "@/components/pokemons/Counter";
+import Title from "@/components/pokemons/shared/Title.astro";
+import MainLayout from "@/Layout/MainLayout.astro";
+
+const counterValue = 15;
+---
+
+<MainLayout title="TITLE" description="page Descriptions" image="">
+  <Title>Islas</Title>
+
+  <video controls="" autoplay="" transition:persist>
+    <source
+      src="https://ia804502.us.archive.org/33/items/GoldenGa1939_3/GoldenGa1939_3_512kb.mp4"
+      type="video/mp4"
+    />
+  </video>
+  <div
+    class="w-full bg-red-300/40 h-[1500px] flex text-center justify-center items-center"
+  >
+    <h1 class="">Center</h1>
+  </div>
+
+  <Counter
+    transition:persist="counter"
+    transition:persist-props
+    client:visible
+    initValue={counterValue}
+  >
+    <Title>Title from Title Astro</Title></Counter
+  >
+</MainLayout>

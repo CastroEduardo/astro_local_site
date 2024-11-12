@@ -1,0 +1,4 @@
+{
+    "pattern": "**/*.tsx",
+    "snippet": "React Functional Component"
+}
